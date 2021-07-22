@@ -18,9 +18,9 @@ export const createPost = async (req, res) => {
 
     try {
         await newPost.save();
-        res.send(201).json(newPost);
+        res.status(201).json(newPost);
     } catch (error) {
-        res.send(409).json({message: error.message});
+        res.status(409).json({message: error.message});
     }
 }
 
@@ -44,4 +44,15 @@ export const deletePost = async (req, res) => {
 
     res.send({ message: 'Post deleted successfully' });
 
+}
+
+export const likePost = async (req, res) => {
+    const { id } = req.params;
+
+    if(!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('Post liked successfully');
+
+    const post = await PostMessage.findById(id);
+    const updatedPost = await PostMessage.findByIdAndUpdate(id, { likeCount: post.likeCount + 1}, { new: true });
+
+    res.json(updatedPost);
 }
