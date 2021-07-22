@@ -1,4 +1,4 @@
-export default (posts = [], action) => {
+const posts = (posts = [], action) => {
     switch (action.type) {
         
         case 'FETCH_ALL':
@@ -19,6 +19,7 @@ export default (posts = [], action) => {
     }
 }
 
+export default posts;
 
 // const reducer = (state, action) => {
 //     switch (action.type) {
