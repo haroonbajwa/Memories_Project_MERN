@@ -22,7 +22,7 @@ const posts = (state = { isLoading: true, posts: [] }, action) => {
             return { ...state, post: action.payload }
 
         case FETCH_BY_SEARCH:
-            return { ...state.posts, posts: action.payload };
+            return { ...state, posts: action.payload };
 
         case CREATE:
             return { ...state, posts: [...state.posts, action.payload] };

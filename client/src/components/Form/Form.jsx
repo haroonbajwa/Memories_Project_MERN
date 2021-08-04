@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { TextField, Button, Typography, Paper } from '@material-ui/core';
 import FileBase from 'react-file-base64';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
 
 import useStyles from './styles';
 import { createPost, updatePost } from '../../actions/posts';
@@ -15,13 +16,14 @@ const Form = ( { currentId, setCurrentId }) => {
         selectedFile: ''
     });
 
-    const post = useSelector((state) => currentId ? state.posts.find((p) => p._id === currentId) : null); 
+    const post = useSelector((state) => currentId ? state.posts.posts.find((p) => p._id === currentId) : null); 
 
     const classes = useStyles();
 
     const user = JSON.parse(localStorage.getItem('profile'));
 
     const dispatch = useDispatch();
+    const history = useHistory();
 
 
     useEffect(() => {
@@ -36,7 +38,7 @@ const Form = ( { currentId, setCurrentId }) => {
             dispatch(updatePost(currentId, { ...postData, name: user?.result?.name }));
         }
         else{
-            dispatch(createPost({ ...postData, name: user?.result?.name }));
+            dispatch(createPost({ ...postData, name: user?.result?.name }, history));
         }
         clear();
     }
@@ -62,7 +64,7 @@ const Form = ( { currentId, setCurrentId }) => {
             <form autoComplete="off" noValidate className={`${classes.root} ${classes.form}`} onSubmit={handleSubmit}>
                 <Typography variant="h6">{currentId ? 'Editing' : 'Creating'} a Memory</Typography>
                 <TextField variant = "outlined" name = "title" label = "Title" fullWidth value = {postData.title} onChange = {(e) => setPostData({ ...postData, title: e.target.value })} />
-                <TextField variant = "outlined" name = "message" label = "Message" fullWidth value = {postData.message} onChange = {(e) => setPostData({ ...postData, message: e.target.value })} />
+                <TextField multiline variant = "outlined" name = "message" label = "Message" fullWidth value = {postData.message} onChange = {(e) => setPostData({ ...postData, message: e.target.value })} />
                 <TextField variant = "outlined" name = "tags" label = "Tags" fullWidth value = {postData.tags} onChange = {(e) => setPostData({ ...postData, tags: e.target.value.split(',') })} />
                 
                 <div className={classes.fileInput}>
